@@ -4,6 +4,7 @@
   author: "Cap_Apiluk",
   category: "Output",
   version: "1.0.0",
+  icon: "/static/icon.png",
   color: "#FF6B35",
 
   blocks: [
