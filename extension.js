@@ -1,6 +1,6 @@
 ({
-  name: "Relay 4CH Delay",
-  description: "ควบคุมรีเลย์ 4",
+  name: "Relay 4CH Simple",
+  description: "ควบคุมรีเลย์ 4 ช่อง เปิด-ปิดทันที",
   author: "Cap_Apiluk",
   category: "Output",
   version: "1.0.0",
@@ -15,11 +15,6 @@
             <field name="NUM">1</field>
           </shadow>
         </value>
-        <value name="DELAY">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
       </block>`
     },
     {
@@ -30,12 +25,10 @@
             <field name="NUM">1</field>
           </shadow>
         </value>
-        <value name="DELAY">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
       </block>`
+    },
+    {
+      xml: `<block type="relay_on_all"></block>`
     },
     {
       xml: `<block type="relay_off_all"></block>`
