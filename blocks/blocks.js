@@ -152,7 +152,7 @@ Blockly.Blocks['delay_turn_off'] = {
   }
 };
 
-Blockly.Blocks['delay_turn_off_all'] = {
+Blockly.Blocks['delay_turn_off_all'] = { 
   init: function () {
     this.appendDummyInput().appendField(" ปิดทุกช่อง");
     this.setPreviousStatement(true);
