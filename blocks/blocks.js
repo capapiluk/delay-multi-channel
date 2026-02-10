@@ -1,21 +1,16 @@
 // ========================================
 // Delay Multi Channel Extension - Blocks
+// Compatible with Blockly v8+ / KidBright
 // ========================================
 
-// Block 1: ตั้งค่าหลายช่อง
+/* ---------- Block: Setup Channels ---------- */
 Blockly.Blocks['delay_setup_channels'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField("🔧 ตั้งค่า Delay")
       .appendField(new Blockly.FieldDropdown([
-        ["1 ช่อง", "1"],
-        ["2 ช่อง", "2"],
-        ["3 ช่อง", "3"],
-        ["4 ช่อง", "4"],
-        ["5 ช่อง", "5"],
-        ["6 ช่อง", "6"],
-        ["7 ช่อง", "7"],
-        ["8 ช่อง", "8"]
+        ["1 ช่อง", "1"], ["2 ช่อง", "2"], ["3 ช่อง", "3"], ["4 ช่อง", "4"],
+        ["5 ช่อง", "5"], ["6 ช่อง", "6"], ["7 ช่อง", "7"], ["8 ช่อง", "8"]
       ]), "num_channels");
 
     this.appendValueInput("pins")
@@ -29,29 +24,29 @@ Blockly.Blocks['delay_setup_channels'] = {
   }
 };
 
-// Block 1.1: pin list
+/* ---------- Block: Pin List (Mutator) ---------- */
 Blockly.Blocks['delay_pin_list'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField("📌 รายการขา");
     this.itemCount_ = 2;
     this.updateShape_();
     this.setOutput(true, "Array");
     this.setColour("#E67E22");
-    this.setMutator(new Blockly.Mutator(['delay_pin_list_item']));
+    this.setMutator('delay_pin_list_mutator');
   },
 
-  mutationToDom: function() {
+  mutationToDom: function () {
     const c = document.createElement('mutation');
     c.setAttribute('items', this.itemCount_);
     return c;
   },
 
-  domToMutation: function(xml) {
+  domToMutation: function (xml) {
     this.itemCount_ = parseInt(xml.getAttribute('items'), 10) || 2;
     this.updateShape_();
   },
 
-  decompose: function(ws) {
+  decompose: function (ws) {
     const c = ws.newBlock('delay_pin_list_container');
     c.initSvg();
     let conn = c.getInput('STACK').connection;
@@ -64,7 +59,7 @@ Blockly.Blocks['delay_pin_list'] = {
     return c;
   },
 
-  compose: function(c) {
+  compose: function (c) {
     let item = c.getInputTargetBlock('STACK');
     const conns = [];
     while (item) {
@@ -80,7 +75,7 @@ Blockly.Blocks['delay_pin_list'] = {
     }
   },
 
-  updateShape_: function() {
+  updateShape_: function () {
     let i = 0;
     while (this.getInput('ADD' + i)) {
       this.removeInput('ADD' + i);
@@ -94,26 +89,42 @@ Blockly.Blocks['delay_pin_list'] = {
   }
 };
 
+/* ---------- Mutator Registration (NEW Blockly) ---------- */
+Blockly.Extensions.registerMutator(
+  'delay_pin_list_mutator',
+  {
+    mutationToDom: Blockly.Blocks['delay_pin_list'].mutationToDom,
+    domToMutation: Blockly.Blocks['delay_pin_list'].domToMutation,
+    decompose: Blockly.Blocks['delay_pin_list'].decompose,
+    compose: Blockly.Blocks['delay_pin_list'].compose
+  },
+  null,
+  ['delay_pin_list_item']
+);
+
+/* ---------- Mutator Helper Blocks ---------- */
 Blockly.Blocks['delay_pin_list_container'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField("รายการขา");
     this.appendStatementInput("STACK");
     this.setColour("#E67E22");
+    this.contextMenu = false;
   }
 };
 
 Blockly.Blocks['delay_pin_list_item'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField("ขา");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour("#E67E22");
+    this.contextMenu = false;
   }
 };
 
-// เปิดช่อง
+/* ---------- Control Blocks ---------- */
 Blockly.Blocks['delay_turn_on'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput("channel").setCheck("Number").appendField("✅ เปิดช่อง");
     this.appendValueInput("delay").setCheck("Number").appendField("หน่วง");
     this.appendDummyInput().appendField("วินาที");
@@ -123,9 +134,8 @@ Blockly.Blocks['delay_turn_on'] = {
   }
 };
 
-// ปิดช่อง
 Blockly.Blocks['delay_turn_off'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput("channel").setCheck("Number").appendField("❌ ปิดช่อง");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -133,9 +143,8 @@ Blockly.Blocks['delay_turn_off'] = {
   }
 };
 
-// เช็คสถานะ
 Blockly.Blocks['delay_is_on'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput("channel").setCheck("Number").appendField("ช่อง");
     this.appendDummyInput().appendField("เปิดอยู่?");
     this.setOutput(true, "Boolean");
@@ -143,9 +152,8 @@ Blockly.Blocks['delay_is_on'] = {
   }
 };
 
-// เวลาเหลือ
 Blockly.Blocks['delay_time_left'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput("channel").setCheck("Number").appendField("ช่อง");
     this.appendDummyInput().appendField("เหลือเวลา (วินาที)");
     this.setOutput(true, "Number");
@@ -153,9 +161,8 @@ Blockly.Blocks['delay_time_left'] = {
   }
 };
 
-// update
 Blockly.Blocks['delay_update'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField("🔄 อัปเดต Delay");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -163,9 +170,8 @@ Blockly.Blocks['delay_update'] = {
   }
 };
 
-// ปิดทุกช่อง
 Blockly.Blocks['delay_turn_off_all'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField("🚫 ปิดทุกช่อง");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -173,9 +179,8 @@ Blockly.Blocks['delay_turn_off_all'] = {
   }
 };
 
-// เปิดหลายช่อง
 Blockly.Blocks['delay_turn_on_multiple'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput("channels").setCheck("Array").appendField("เปิดหลายช่อง");
     this.appendValueInput("delay").setCheck("Number").appendField("หน่วง");
     this.appendDummyInput().appendField("วินาที");
