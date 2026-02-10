@@ -1,9 +1,15 @@
+const RELAY_CHANNELS = [
+  ["ช่อง 1", "1"],
+  ["ช่อง 2", "2"],
+  ["ช่อง 3", "3"],
+  ["ช่อง 4", "4"]
+];
+
 Blockly.Blocks['relay_on'] = {
   init: function () {
     this.appendDummyInput()
-      .appendField("เปิดรีเลย์ ช่อง");
-    this.appendValueInput("CH")
-      .setCheck("Number");
+      .appendField("เปิดรีเลย์")
+      .appendField(new Blockly.FieldDropdown(RELAY_CHANNELS), "CH");
 
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -14,9 +20,8 @@ Blockly.Blocks['relay_on'] = {
 Blockly.Blocks['relay_off'] = {
   init: function () {
     this.appendDummyInput()
-      .appendField("ปิดรีเลย์ ช่อง");
-    this.appendValueInput("CH")
-      .setCheck("Number");
+      .appendField("ปิดรีเลย์")
+      .appendField(new Blockly.FieldDropdown(RELAY_CHANNELS), "CH");
 
     this.setPreviousStatement(true);
     this.setNextStatement(true);

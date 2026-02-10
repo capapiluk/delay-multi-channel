@@ -1,11 +1,11 @@
 Blockly.Python['relay_on'] = function (block) {
-  const ch = Blockly.Python.valueToCode(block, 'CH', Blockly.Python.ORDER_ATOMIC);
+  const ch = block.getFieldValue('CH');
   Blockly.Python.definitions_['import_relay'] = 'import relay_4ch';
   return `relay_4ch.on(${ch})\n`;
 };
 
 Blockly.Python['relay_off'] = function (block) {
-  const ch = Blockly.Python.valueToCode(block, 'CH', Blockly.Python.ORDER_ATOMIC);
+  const ch = block.getFieldValue('CH');
   Blockly.Python.definitions_['import_relay'] = 'import relay_4ch';
   return `relay_4ch.off(${ch})\n`;
 };
