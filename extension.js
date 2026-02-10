@@ -1,21 +1,27 @@
 ({
-  name: "Relay Multi Channel",
-  description: "ควบคุม Relay หลายช่อง พร้อมตั้งเวลาหน่วง",
+  name: "Relay 4 ช่อง (ง่าย)",
+  description: "เปิด-ปิด Relay 4 ช่อง (GPIO 18,19,21,22) พร้อมหน่วงเวลาเป็นวินาที",
   author: "Cap_Apiluk",
   category: "Output",
-  version: "3.0.2",
+  version: "1.0.0",
   icon: "/static/icon.png",
   color: "#FF6B35",
 
   blocks: [
-    { xml: `<block type="delay_setup_channels"></block>` },
-    { xml: `<block type="delay_pin_list"></block>` },
-    { xml: `<block type="delay_turn_on"></block>` },
-    { xml: `<block type="delay_turn_off"></block>` },
-    { xml: `<block type="delay_turn_off_all"></block>` },
-    { xml: `<block type="delay_update"></block>` },
-    { xml: `<block type="delay_is_on"></block>` },
-    { xml: `<block type="delay_time_left"></block>` }
+    {
+      xml: `
+        <block type="relay_on">
+          <value name="delay">
+            <shadow type="math_number">
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+        </block>
+      `
+    },
+    {
+      xml: `<block type="relay_off_all"></block>`
+    }
   ],
 
   js: [
@@ -24,8 +30,8 @@
 
   modules: [
     {
-      name: "delay_multi_channel",
-      path: "/modules/delay_multi_channel.py"
+      name: "relay_4ch",
+      path: "/modules/relay_4ch.py"
     }
   ]
 });
