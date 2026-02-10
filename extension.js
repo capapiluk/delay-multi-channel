@@ -1,5 +1,5 @@
 ({
-    name: "Delay 4 ช่อง + Calibration",
+    name: "Delay 4 ช่อง",
     description: "ควบคุมการเปิด-ปิดอุปกรณ์ 4 ช่อง พร้อมตั้งเวลาหน่วง + โหมด Calibration",
     author: "Cap_Apiluk",
     category: "Output",
