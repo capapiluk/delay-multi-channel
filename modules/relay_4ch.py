@@ -64,7 +64,7 @@ def toggle(ch):
         print(f"สลับ Relay ช่อง {ch} เป็น {status}")
 
 def status():
-    """แสดงสถานะปัจจุบันของ relay ทุกช่อง"""
+    """แสดงสถานะปัจจุบันของ relay ทุกช่อง""" 
     print("สถานะ Relay:")
     for ch_num, pin in _CHANNELS.items():
         gpio_num = 15 + ch_num  # GPIO 16, 17, 18, 19
