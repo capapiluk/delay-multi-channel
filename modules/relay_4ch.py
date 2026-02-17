@@ -1,26 +1,84 @@
 from machine import Pin
+import time
 
+# ใช้ GPIO pins 16, 17, 18, 19 สำหรับ relay 4 ช่อง
 _CHANNELS = {
-    1: Pin(18, Pin.OUT),
-    2: Pin(19, Pin.OUT),
-    3: Pin(21, Pin.OUT),
-    4: Pin(22, Pin.OUT),
+    1: Pin(16, Pin.OUT),
+    2: Pin(17, Pin.OUT),
+    3: Pin(18, Pin.OUT),
+    4: Pin(19, Pin.OUT),
 }
 
+# ฟังก์ชันรอแยกออกมาเป็นวินาที
+def wait(seconds):
+    """รอตามจำนวนวินาทีที่กำหนด"""
+    time.sleep(seconds)
+
+# เปิดขาเดี่ยว
 def on(ch):
+    """เปิด relay ช่องที่กำหนด (1-4)"""
     ch = int(ch)
     if ch in _CHANNELS:
-        _CHANNELS[ch].value(1)
+        _CHANNELS[ch].value(0)  # ส่ง 0 เพื่อเปิด relay
+        print(f"เปิด Relay ช่อง {ch} (GPIO{_CHANNELS[ch]})")
 
+# ปิดขาเดี่ยว
 def off(ch):
+    """ปิด relay ช่องที่กำหนด (1-4)"""
     ch = int(ch)
     if ch in _CHANNELS:
-        _CHANNELS[ch].value(0)
+        _CHANNELS[ch].value(1)  # ส่ง 1 เพื่อปิด relay
+        print(f"ปิด Relay ช่อง {ch} (GPIO{_CHANNELS[ch]})")
 
+# เปิดทั้งหมด
 def on_all():
-    for pin in _CHANNELS.values():
-        pin.value(1)
+    """เปิด relay ทุกช่อง"""
+    for ch_num, pin in _CHANNELS.items():
+        pin.value(0)  # ส่ง 0 เพื่อเปิด relay
+    print("เปิด Relay ทั้งหมด (GPIO 16, 17, 18, 19)")
 
+# ปิดทั้งหมด
 def off_all():
-    for pin in _CHANNELS.values():
-        pin.value(0)
+    """ปิด relay ทุกช่อง"""
+    for ch_num, pin in _CHANNELS.items():
+        pin.value(1)  # ส่ง 1 เพื่อปิด relay
+    print("ปิด Relay ทั้งหมด (GPIO 16, 17, 18, 19)")
+
+# ฟังก์ชันเพิ่มเติมสำหรับใช้งานง่าย
+def open_all():
+    """เปิดทั้งหมด (alias สำหรับ on_all)"""
+    on_all()
+
+def close_all():
+    """ปิดทั้งหมด (alias สำหรับ off_all)"""
+    off_all()
+
+def toggle(ch):
+    """สลับสถานะ relay ช่องที่กำหนด"""
+    ch = int(ch)
+    if ch in _CHANNELS:
+        current_value = _CHANNELS[ch].value()
+        new_value = 1 - current_value
+        _CHANNELS[ch].value(new_value)
+        status = "ปิด" if new_value else "เปิด"  # กลับ logic เพราะ Active Low
+        print(f"สลับ Relay ช่อง {ch} เป็น {status}")
+
+def status():
+    """แสดงสถานะปัจจุบันของ relay ทุกช่อง"""
+    print("สถานะ Relay:")
+    for ch_num, pin in _CHANNELS.items():
+        gpio_num = 15 + ch_num  # GPIO 16, 17, 18, 19
+        status = "ปิด" if pin.value() else "เปิด"  # กลับ logic เพราะ Active Low
+        print(f"  ช่อง {ch_num} (GPIO{gpio_num}): {status}")
+
+def sequence_on(delay=1):
+    """เปิด relay ทีละช่องตามลำดับ พร้อมหน่วงเวลา"""
+    for ch in range(1, 5):
+        on(ch)
+        wait(delay)
+
+def sequence_off(delay=1):
+    """ปิด relay ทีละช่องตามลำดับ พร้อมหน่วงเวลา"""
+    for ch in range(1, 5):
+        off(ch)
+        wait(delay)
