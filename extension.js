@@ -1,9 +1,9 @@
-({
+ ({
   name: "Relay 4CH Simple",
   description: "ควบคุมรีเลย์ 4 ช่อง เปิด-ปิดทันที (MicroPython 1.6.0+)",
   author: "Cap_Apiluk",
   category: "Output",
-  version: "1.1.0",
+  version: "1.4.0",
   icon: "/static/icon.png",
   color: "#FF6B35",
 

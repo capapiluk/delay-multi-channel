@@ -3,8 +3,8 @@ Relay 4CH Controller Module for MicroPython 1.6.0+
 โมดูลควบคุม Relay 4 ช่อง สำหรับ MicroPython 1.6.0 ขึ้นไป
 
 Compatible with: MicroPython 1.6.0+
-Hardware: ESP32, ESP8266, และบอร์ดอื่นๆ ที่รัน MicroPython
-GPIO Pins: 15, 18, 19, 21 (Active Low Logic)
+Hardware: ESP32 (แนะนำ) - GPIO pins เหล่านี้ไม่มีใน ESP8266
+GPIO Pins: 18, 19, 21, 22 (Active Low Logic) - ไม่ขัดกับ WiFi
 """
 
 from machine import Pin
@@ -20,12 +20,13 @@ def digital_read(pin):
     """อ่านค่า digital (0 หรือ 1) จาก pin ที่กำหนด"""
     return pin.value()
 
-# ใช้ GPIO pins 15, 18, 19, 21 สำหรับ relay 4 ช่อง
+# ใช้ GPIO pins 18, 19, 21, 22 สำหรับ relay 4 ช่อง (ไม่ขัดกับ WiFi)
+# เหมาะสำหรับ ESP32 เท่านั้น (ESP8266 ไม่มี GPIO pins เหล่านี้)
 _CHANNELS = {
-    1: Pin(15, Pin.OUT),
-    2: Pin(18, Pin.OUT),
-    3: Pin(19, Pin.OUT),
-    4: Pin(21, Pin.OUT),
+    1: Pin(18, Pin.OUT),  # GPIO 18
+    2: Pin(19, Pin.OUT),  # GPIO 19
+    3: Pin(21, Pin.OUT),  # GPIO 21
+    4: Pin(22, Pin.OUT),  # GPIO 22
 }
 
 # ฟังก์ชันเริ่มต้น - ปิด relay ทุกช่อง (Active Low = ส่ง 1)
@@ -73,14 +74,14 @@ def on_all():
     """เปิด relay ทุกช่อง"""
     for ch_num, pin in _CHANNELS.items():
         digital_write(pin, 0)  # ส่ง 0 เพื่อเปิด relay
-    print("เปิด Relay ทั้งหมด (GPIO 15, 18, 19, 21)")
+    print("เปิด Relay ทั้งหมด (GPIO 18, 19, 21, 22)")
 
 # ปิดทั้งหมด
 def off_all():
     """ปิด relay ทุกช่อง"""
     for ch_num, pin in _CHANNELS.items():
         digital_write(pin, 1)  # ส่ง 1 เพื่อปิด relay
-    print("ปิด Relay ทั้งหมด (GPIO 15, 18, 19, 21)")
+    print("ปิด Relay ทั้งหมด (GPIO 18, 19, 21, 22)")
 
 # ฟังก์ชันเพิ่มเติมสำหรับใช้งานง่าย
 def open_all():
@@ -109,7 +110,7 @@ def toggle(ch):
 def status():
     """แสดงสถานะปัจจุบันของ relay ทุกช่อง""" 
     print("สถานะ Relay:")
-    gpio_pins = [15, 18, 19, 21]  # GPIO pins ตามลำดับช่อง
+    gpio_pins = [18, 19, 21, 22]  # GPIO pins ตามลำดับช่อง
     for ch_num, pin in _CHANNELS.items():
         gpio_num = gpio_pins[ch_num - 1]
         relay_status = "ปิด" if digital_read(pin) else "เปิด"  # กลับ logic เพราะ Active Low
