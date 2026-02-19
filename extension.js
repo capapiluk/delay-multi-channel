@@ -19,6 +19,15 @@
     },
     {
       xml: `<block type="relay_off_all"></block>`
+    },
+    {
+      xml: `<block type="relay_wait">
+        <value name="SECONDS">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>`
     }
   ],
 

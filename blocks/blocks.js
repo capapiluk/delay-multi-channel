@@ -50,3 +50,19 @@ Blockly.Blocks['relay_off_all'] = {
     this.setColour(0);
   }
 };
+
+// บล็อคคำสั่งรอ/หน่วงเวลา
+Blockly.Blocks['relay_wait'] = {
+  init: function () {
+    this.appendValueInput("SECONDS")
+      .setCheck("Number")
+      .appendField("รอ");
+    this.appendDummyInput()
+      .appendField("วินาที");
+
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(290);
+    this.setTooltip("หน่วงเวลาตามจำนวนวินาทีที่กำหนด");
+  }
+};
