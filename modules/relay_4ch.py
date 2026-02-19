@@ -28,6 +28,15 @@ _CHANNELS = {
     4: Pin(21, Pin.OUT),
 }
 
+# ฟังก์ชันเริ่มต้น - ปิด relay ทุกช่อง (Active Low = ส่ง 1)
+def _init_relay():
+    """เริ่มต้น relay ให้ปิดทุกช่อง"""
+    for ch_num, pin in _CHANNELS.items():
+        digital_write(pin, 1)  # ส่ง 1 เพื่อปิด relay (Active Low)
+
+# เรียกใช้ฟังก์ชันเริ่มต้นเมื่อโหลดโมดูล
+_init_relay()
+
 # ฟังก์ชันรอแยกออกมาเป็นวินาที
 def wait(seconds):
     """รอตามจำนวนวินาทีที่กำหนด"""
@@ -36,18 +45,28 @@ def wait(seconds):
 # เปิดขาเดี่ยว
 def on(ch):
     """เปิด relay ช่องที่กำหนด (1-4)"""
-    ch = int(ch)
-    if ch in _CHANNELS:
-        digital_write(_CHANNELS[ch], 0)  # ส่ง 0 เพื่อเปิด relay
-        print("เปิด Relay ช่อง " + str(ch) + " (GPIO" + str(_CHANNELS[ch]) + ")")
+    try:
+        ch = int(ch)
+        if ch in _CHANNELS:
+            digital_write(_CHANNELS[ch], 0)  # ส่ง 0 เพื่อเปิด relay
+            print("เปิด Relay ช่อง " + str(ch) + " (GPIO" + str(_CHANNELS[ch]) + ")")
+        else:
+            print("ข้อผิดพลาด: ช่อง relay " + str(ch) + " ไม่มีอยู่ (ใช้ได้เฉพาะ 1-4)")
+    except ValueError:
+        print("ข้อผิดพลาด: กรุณาระบุหมายเลขช่องที่ถูกต้อง (1-4)")
 
 # ปิดขาเดี่ยว
 def off(ch):
     """ปิด relay ช่องที่กำหนด (1-4)"""
-    ch = int(ch)
-    if ch in _CHANNELS:
-        digital_write(_CHANNELS[ch], 1)  # ส่ง 1 เพื่อปิด relay
-        print("ปิด Relay ช่อง " + str(ch) + " (GPIO" + str(_CHANNELS[ch]) + ")")
+    try:
+        ch = int(ch)
+        if ch in _CHANNELS:
+            digital_write(_CHANNELS[ch], 1)  # ส่ง 1 เพื่อปิด relay
+            print("ปิด Relay ช่อง " + str(ch) + " (GPIO" + str(_CHANNELS[ch]) + ")")
+        else:
+            print("ข้อผิดพลาด: ช่อง relay " + str(ch) + " ไม่มีอยู่ (ใช้ได้เฉพาะ 1-4)")
+    except ValueError:
+        print("ข้อผิดพลาด: กรุณาระบุหมายเลขช่องที่ถูกต้อง (1-4)")
 
 # เปิดทั้งหมด
 def on_all():
@@ -74,13 +93,18 @@ def close_all():
 
 def toggle(ch):
     """สลับสถานะ relay ช่องที่กำหนด"""
-    ch = int(ch)
-    if ch in _CHANNELS:
-        current_value = digital_read(_CHANNELS[ch])
-        new_value = 1 - current_value
-        digital_write(_CHANNELS[ch], new_value)
-        status = "ปิด" if new_value else "เปิด"  # กลับ logic เพราะ Active Low
-        print("สลับ Relay ช่อง " + str(ch) + " เป็น " + status)
+    try:
+        ch = int(ch)
+        if ch in _CHANNELS:
+            current_value = digital_read(_CHANNELS[ch])
+            new_value = 1 - current_value
+            digital_write(_CHANNELS[ch], new_value)
+            status = "ปิด" if new_value else "เปิด"  # กลับ logic เพราะ Active Low
+            print("สลับ Relay ช่อง " + str(ch) + " เป็น " + status)
+        else:
+            print("ข้อผิดพลาด: ช่อง relay " + str(ch) + " ไม่มีอยู่ (ใช้ได้เฉพาะ 1-4)")
+    except ValueError:
+        print("ข้อผิดพลาด: กรุณาระบุหมายเลขช่องที่ถูกต้อง (1-4)")
 
 def status():
     """แสดงสถานะปัจจุบันของ relay ทุกช่อง""" 
