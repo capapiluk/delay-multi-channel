@@ -1,3 +1,12 @@
+"""
+Relay 4CH Controller Module for MicroPython 1.6.0+
+โมดูลควบคุม Relay 4 ช่อง สำหรับ MicroPython 1.6.0 ขึ้นไป
+
+Compatible with: MicroPython 1.6.0+
+Hardware: ESP32, ESP8266, และบอร์ดอื่นๆ ที่รัน MicroPython
+GPIO Pins: 15, 18, 19, 21 (Active Low Logic)
+"""
+
 from machine import Pin
 import time
 
@@ -30,7 +39,7 @@ def on(ch):
     ch = int(ch)
     if ch in _CHANNELS:
         digital_write(_CHANNELS[ch], 0)  # ส่ง 0 เพื่อเปิด relay
-        print(f"เปิด Relay ช่อง {ch} (GPIO{_CHANNELS[ch]})")
+        print("เปิด Relay ช่อง " + str(ch) + " (GPIO" + str(_CHANNELS[ch]) + ")")
 
 # ปิดขาเดี่ยว
 def off(ch):
@@ -38,7 +47,7 @@ def off(ch):
     ch = int(ch)
     if ch in _CHANNELS:
         digital_write(_CHANNELS[ch], 1)  # ส่ง 1 เพื่อปิด relay
-        print(f"ปิด Relay ช่อง {ch} (GPIO{_CHANNELS[ch]})")
+        print("ปิด Relay ช่อง " + str(ch) + " (GPIO" + str(_CHANNELS[ch]) + ")")
 
 # เปิดทั้งหมด
 def on_all():
@@ -71,7 +80,7 @@ def toggle(ch):
         new_value = 1 - current_value
         digital_write(_CHANNELS[ch], new_value)
         status = "ปิด" if new_value else "เปิด"  # กลับ logic เพราะ Active Low
-        print(f"สลับ Relay ช่อง {ch} เป็น {status}")
+        print("สลับ Relay ช่อง " + str(ch) + " เป็น " + status)
 
 def status():
     """แสดงสถานะปัจจุบันของ relay ทุกช่อง""" 
@@ -79,8 +88,8 @@ def status():
     gpio_pins = [15, 18, 19, 21]  # GPIO pins ตามลำดับช่อง
     for ch_num, pin in _CHANNELS.items():
         gpio_num = gpio_pins[ch_num - 1]
-        status = "ปิด" if digital_read(pin) else "เปิด"  # กลับ logic เพราะ Active Low
-        print(f"  ช่อง {ch_num} (GPIO{gpio_num}): {status}")
+        relay_status = "ปิด" if digital_read(pin) else "เปิด"  # กลับ logic เพราะ Active Low
+        print("  ช่อง " + str(ch_num) + " (GPIO" + str(gpio_num) + "): " + relay_status)
 
 def sequence_on(delay=1):
     """เปิด relay ทีละช่องตามลำดับ พร้อมหน่วงเวลา"""
